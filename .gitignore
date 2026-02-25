@@ -1,0 +1,11 @@
+# Ignore Python virtual environments
+venv/
+env/
+myenv/
+__pycache__/
+*.pyc
+
+# Ignore .env file in backend folder
+.env
+.DS_Store
+uploads/
