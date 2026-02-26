@@ -18,7 +18,7 @@ def generative():
         text = data['text'].strip()
         tone = data.get('tone', 'neutral').strip()
         user = data['user'].strip()
-        model = data.get('model', 'meta-llama/llama-3.2-3b-instruct:free').strip()
+        model = "gemini-2.5-flash"
         
         if not text:
             return jsonify({"error": "Text cannot be empty"}), 400

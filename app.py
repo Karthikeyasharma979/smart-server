@@ -4,7 +4,7 @@ import os
 import logging
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 # Routes for text analysis
 
@@ -14,13 +14,13 @@ from routes.text_routes import text_bp
 from routes.health_routes import health_bp, not_found, internal_error
 
 # Existing blueprints for PDF upload + vector DB query
-# from routes.upload import upload_bp
-# from routes.query import query_bp
+from routes.upload import upload_bp
+from routes.query import query_bp
 
-# from routes.generative import generative_bp
-# from routes.summary import summary_bp
+from routes.generative import generative_bp
+from routes.summary import summary_bp
 # from humanizetext.humanizeit import humanizer_bp
-# from humanizetext.plaigarismcheck import check_bp
+from humanizetext.plaigarismcheck import check_bp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,15 +33,15 @@ CORS(app)
 
 
 # Register blueprint routes (upload/query)
-# app.register_blueprint(upload_bp)
-# app.register_blueprint(query_bp)
+app.register_blueprint(upload_bp)
+app.register_blueprint(query_bp)
 app.register_blueprint(text_bp)
 app.register_blueprint(health_bp)
 
-# app.register_blueprint(summary_bp)
-# app.register_blueprint(generative_bp)
+app.register_blueprint(summary_bp)
+app.register_blueprint(generative_bp)
 # app.register_blueprint(humanizer_bp)
-# app.register_blueprint(check_bp)
+app.register_blueprint(check_bp)
 
 # Register error handlers
 app.register_error_handler(404, not_found)
