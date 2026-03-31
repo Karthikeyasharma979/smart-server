@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from openai import OpenAI
 import os
 import logging
+from utils.Comparator import compare_texts
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ def check_plagiarism(text: str):
 
     try:
         completion = client.chat.completions.create(
-            model="gemini-2.5-flash",
+            model="gemini-2.0-flash",
             messages=[
                 {
                     "role": "user",
@@ -54,15 +55,30 @@ def check_plagiarism(text: str):
 def check_plag():
     try:
         data = request.get_json()
-        if not data or 'text' not in data:
-            return jsonify({"error": "Missing JSON body or text parameter"}), 400
+        if not data:
+            return jsonify({"error": "Missing JSON body"}), 400
+            
+        # Case 1: Text Comparison (two texts)
+        text1 = data.get('text1')
+        text2 = data.get('text2')
         
-        text = data.get('text').strip()
+        if text1 and text2:
+            logger.info("Performing dual-text comparison.")
+            output = compare_texts(text1.strip(), text2.strip())
+            return jsonify({"output": output, "mode": "comparison"}), 200
+            
+        # Case 2: Standard Plagiarism Check (one text)
+        text = data.get('text')
+        if not text:
+            return jsonify({"error": "Missing text, text1, or text2 parameter"}), 400
+        
+        text = text.strip()
         if not text:
             return jsonify({"error": "Text cannot be empty"}), 400
         
+        logger.info(f"Performing single-text analysis: {text[:50]}...")
         output = check_plagiarism(text)
-        return jsonify({"output": output}), 200
+        return jsonify({"output": output, "mode": "analysis"}), 200
         
     except Exception as e:
         logger.error(f"Error in plagiarism route: {e}")

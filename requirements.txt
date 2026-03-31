@@ -19,3 +19,6 @@ gunicorn
 # sentence-transformers
 # pypdf
 # tiktoken
+ollama
+ddgs
+beautifulsoup4

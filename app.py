@@ -21,6 +21,7 @@ from routes.generative import generative_bp
 from routes.summary import summary_bp
 # from humanizetext.humanizeit import humanizer_bp
 from humanizetext.plaigarismcheck import check_bp
+from routes.search_routes import search_bp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +43,7 @@ app.register_blueprint(summary_bp)
 app.register_blueprint(generative_bp)
 # app.register_blueprint(humanizer_bp)
 app.register_blueprint(check_bp)
+app.register_blueprint(search_bp)
 
 # Register error handlers
 app.register_error_handler(404, not_found)

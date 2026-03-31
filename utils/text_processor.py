@@ -51,7 +51,13 @@ def gram_check(text: str) -> Tuple[List[Dict], str]:
         # Sort matches by offset ascending for reporting
         matches_ascending = sorted(matches, key=lambda x: x.offset)
         
+        filtered_matches = []
         for match in matches_ascending:
+            # Filter out annoying unpaired symbol errors (common with apostrophes/quotes)
+            if "Unpaired symbol" in match.message:
+                continue
+                
+            filtered_matches.append(match)
             error_text = text[match.offset:match.offset + match.errorLength]
             
             issue = {
@@ -73,7 +79,7 @@ def gram_check(text: str) -> Tuple[List[Dict], str]:
         
         corrected_text = text
         # Iterate in reverse order to keep offsets valid
-        for match in reversed(matches_ascending):
+        for match in reversed(filtered_matches):
             if match.replacements:
                 replacement = match.replacements[0]
                 start = match.offset

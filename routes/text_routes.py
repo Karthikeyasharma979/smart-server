@@ -3,7 +3,6 @@ from datetime import datetime
 import logging
 from utils.text_processor import gram_check, calculate_readability, calculate_correction_score
 from utils.tone_generator import generate_tone_suggestions
-from utils.db_manager import col
 
 logger = logging.getLogger(__name__)
 
@@ -50,52 +49,13 @@ def posttext():
             "user": user
         }
         
-        # Store in database
-        if col is not None:
-            insert_result = col.insert_one(result)
-            # Optionally add the inserted ID as a string
-            result["_id"] = str(insert_result.inserted_id)
-        
-        # Remove _id before returning to avoid ObjectId serialization error
-        result.pop("_id", None)
-        
         return jsonify({"success": True, "results": [result]}), 200
         
     except Exception as e:
         logger.error(f"Error processing text: {e}")
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
-@text_bp.route('/gettext', methods=['GET'])
-def gettext():
-    """Retrieve analyzed texts"""
-    try:
-        user = request.args.get('user', '')
-        limit = int(request.args.get('limit', 10))
-        skip = int(request.args.get('skip', 0))
-        
-        if col is None:
-            return jsonify({"error": "Database not available"}), 503
-        
-        query = {"user": user} if user else {}
-        
-        # Get total count
-        total = col.count_documents(query)
-        
-        # Get results with pagination, exclude _id to avoid serialization error
-        results = list(col.find(
-            query,
-            {'_id': 0}
-        ).sort('timestamp', -1).skip(skip).limit(limit))
-        
-        return jsonify({
-            "success": True,
-            "total_found": total,
-            "results": results
-        }), 200
-        
-    except Exception as e:
-        logger.error(f"Error retrieving texts: {e}")
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
 
 @text_bp.route('/tones', methods=['GET'])
 def get_available_tones():

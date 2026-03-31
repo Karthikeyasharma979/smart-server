@@ -33,3 +33,34 @@ def get_response_from_gemini(context, query):
         ]
     )
     return response.choices[0].message.content.strip()
+
+def get_response_from_cohere_rag(context, query):
+    client = OpenAI(
+        base_url="https://models.github.ai/inference",
+        api_key=os.getenv("GITHUB_TOKEN"),
+    )
+
+    system_prompt = f"""
+    You are an expert, highly accurate document analysis assistant. Your sole purpose is to answer the user's question relying **exclusively** on the provided document context.
+
+    Strict Guidelines:
+    1. EXCLUSIVE SOURCE: Use only the provided "Document Context" to formulate your answer. Do not incorporate any outside knowledge or assumptions.
+    2. ABSENCE OF INFORMATION: If the provided context does not contain the information required to answer the question, you MUST reply with this exact phrase: "I cannot find the answer to that question in the provided document." Do not attempt to guess or provide partial answers based on speculation.
+    3. CONCISE & CLEAR: Provide direct, concise answers without unnecessary filler.
+    4. FORMATTING: Structure your answer using Markdown for enhanced readability.
+
+    --- Document Context ---
+    \"\"\"{context}\"\"\"
+    """
+
+    response = client.chat.completions.create(
+        model="cohere/Cohere-command-r-plus-08-2024",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": query}
+        ],
+        temperature=0.8,
+        max_tokens=2048,
+        top_p=0.1
+    )
+    return response.choices[0].message.content.strip()

@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify
 from datetime import datetime
 import logging
 from utils.text_processor import tool
-from utils.db_manager import col, cols
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +13,6 @@ def health_check():
     status = {
         "status": "healthy",
         "language_tool": tool is not None,
-        "database": col is not None,
-        "user_database": cols is not None,
         "timestamp": datetime.utcnow().isoformat()
     }
     return jsonify(status), 200
