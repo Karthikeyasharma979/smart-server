@@ -30,7 +30,10 @@ def upload_file():
 
     try:
         from pypdf import PdfReader
-        pdf = PdfReader(file.stream)
+        import io
+        
+        file_bytes = file.read()
+        pdf = PdfReader(io.BytesIO(file_bytes))
         text = ""
         for page in pdf.pages:
             extracted = page.extract_text()
