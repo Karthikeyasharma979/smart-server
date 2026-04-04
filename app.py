@@ -58,8 +58,11 @@ if __name__ == "__main__":
 
     if os.path.exists(CHROMA_PATH):
         import shutil
-        shutil.rmtree(CHROMA_PATH)
-        logger.info("🧹 Chroma DB cleared on startup.")
+        try:
+            shutil.rmtree(CHROMA_PATH)
+            logger.info("🧹 Chroma DB cleared on startup.")
+        except PermissionError:
+            logger.warning("⚠️ Could not clear Chroma DB — files are locked by another process. Kill other running instances and retry.")
 
     logger.info(f"🚀 Starting Flask application on port {port}")
     app.run(debug=debug, port=port, threaded=True)

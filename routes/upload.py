@@ -28,15 +28,20 @@ def upload_file():
     if not allowed_file(file.filename):
         return jsonify({"error": "File type not allowed"}), 400
 
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(file_path)
-
     try:
-        # Ingest and embed
-        docs = load_pdfs()
-        chunks = chunk(docs)
-        add_to_chroma(chunks)
-        return jsonify({"message": "✅ File uploaded and ingested into Chroma!", "file": file.filename}), 200
+        from pypdf import PdfReader
+        pdf = PdfReader(file.stream)
+        text = ""
+        for page in pdf.pages:
+            extracted = page.extract_text()
+            if extracted:
+                text += extracted + "\n"
+        
+        return jsonify({
+            "message": "✅ File processed successfully!", 
+            "file": file.filename, 
+            "extracted_text": text
+        }), 200
 
     except Exception as e:
         return jsonify({"error": f"❌ Failed to process file: {str(e)}"}), 500
