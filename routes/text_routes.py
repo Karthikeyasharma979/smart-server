@@ -33,6 +33,7 @@ def posttext():
             'formal': generate_tone_suggestions(corrected_text, 'formal'),
             'casual': generate_tone_suggestions(corrected_text, 'casual'),
             'professional': generate_tone_suggestions(corrected_text, 'professional'),
+            'academic': generate_tone_suggestions(corrected_text, 'academic'),
             'friendly': generate_tone_suggestions(corrected_text, 'friendly'),
             'persuasive': generate_tone_suggestions(corrected_text, 'persuasive')
         }
@@ -60,5 +61,5 @@ def posttext():
 @text_bp.route('/tones', methods=['GET'])
 def get_available_tones():
     """Get list of available tone transformations"""
-    tones = ['formal', 'casual', 'professional', 'friendly', 'persuasive']
+    tones = ['formal', 'casual', 'professional', 'academic', 'friendly', 'persuasive']
     return jsonify({"tones": tones}), 200

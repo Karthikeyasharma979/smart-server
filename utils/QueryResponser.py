@@ -1,5 +1,5 @@
 from utils.chromavecdb import get_embed 
-from utils.llmresponder import get_response_from_gemini
+from utils.llmresponder import get_response_from_docqa_model
 
 CHROMA_PATH = "./chroma_db" 
 
@@ -18,6 +18,6 @@ def response(query_text):
         return []
     else:
         context = "\n\n----\n\n".join([doc.page_content for doc in results])
-        return get_response_from_gemini(context, query_text)
+        return get_response_from_docqa_model(context, query_text)
 
 

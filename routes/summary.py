@@ -35,8 +35,8 @@ def summarize():
         if len(text) > 10000:
             return jsonify({"error": "Text too long (max 10000 characters)"}), 400
         
-        length = data.get('length', 'medium').strip()
-        format_type = data.get('format', 'paragraph').strip()
+        length = data.get('length', 'medium').strip().lower()
+        format_type = data.get('format', 'paragraph').strip().lower()
         
         logger.info(f"Processing text for user: {user}, length: {len(text)}, summary_len: {length}, format: {format_type}")
         
