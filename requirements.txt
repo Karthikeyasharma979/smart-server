@@ -17,7 +17,7 @@ chromadb==0.5.18
 sentence-transformers==3.3.1
 
 # Utility features
-ddgs==8.0.1
+ddgs==9.13.0
 requests==2.32.3
 pydantic==2.9.2
 werkzeug==3.0.4
