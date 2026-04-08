@@ -1,27 +1,27 @@
-# Lightweight dependencies for deployment
-Flask
-flask-cors
-python-dotenv
-pymongo
-requests
-openai
-google-genai
-serverless-wsgi
-werkzeug
-gunicorn
-pydantic
+Flask==3.0.3
+flask-cors==4.0.1
+python-dotenv==1.0.1
+gunicorn==22.0.0
+openai==1.51.2
 
-# Heavy ML libraries removed for Vercel/Lambda constraints but needed locally:
-language-tool-python
-textstat
-langchain
-langchain-community
-langchain-chroma
-langchain-text-splitters
-sentence-transformers
-pypdf
-python-docx
-tiktoken
-ollama
-ddgs
-beautifulsoup4
+# Document parsing
+pypdf==5.1.0
+python-docx==1.1.2
+
+# RAG stack
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-chroma==0.1.4
+langchain-text-splitters==0.3.2
+chromadb==0.5.18
+sentence-transformers==3.3.1
+
+# Utility features
+ddgs==8.0.1
+requests==2.32.3
+pydantic==2.9.2
+werkzeug==3.0.4
+
+# Optional analysis features used by text routes
+language-tool-python==2.8.1
+textstat==0.7.4

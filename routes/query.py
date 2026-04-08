@@ -83,7 +83,7 @@ def query_llm():
             return jsonify({"response": result}), 200
 
         import hashlib
-        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
         from langchain_chroma import Chroma
         from utils.chromavecdb import get_embed
         
